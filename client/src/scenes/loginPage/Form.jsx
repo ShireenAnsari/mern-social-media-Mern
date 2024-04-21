@@ -16,6 +16,7 @@ import { setLogin } from "state";
 import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
 import toast from "react-hot-toast";
+import axios from "axios"; // Import axios
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -57,49 +58,44 @@ const Form = () => {
   const isRegister = pageType === "register";
 
   const register = async (values, onSubmitProps) => {
-    // this allows us to send form info with image
     const formData = new FormData();
     for (let value in values) {
       formData.append(value, values[value]);
     }
     formData.append("picturePath", values.picture.name);
 
-    const savedUserResponse = await fetch(
-      "/auth/register",
-      {
-        method: "POST",
-        body: formData,
+    try {
+      const savedUserResponse = await axios.post("/auth/register", formData); // Use axios.post
+      if (savedUserResponse.status === 402) {
+        toast.error("User already exists");
+        return;
       }
-    );
-    if(savedUserResponse.status===402)
-    {
-      toast.error('User already exist')
-      return;
-    }
-    const savedUser = await savedUserResponse.json();
-    onSubmitProps.resetForm();
-
-    if (savedUser) {
-      setPageType("login");
+      const savedUser = savedUserResponse.data;
+      onSubmitProps.resetForm();
+      if (savedUser) {
+        setPageType("login");
+      }
+    } catch (error) {
+      console.error("Error while registering:", error);
     }
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
-    const loggedIn = await loggedInResponse.json();
-    onSubmitProps.resetForm();
-    if (loggedIn) {
-      dispatch(
-        setLogin({
-          user: loggedIn.user,
-          token: loggedIn.token,
-        })
-      );
-      navigate("/home");
+    try {
+      const loggedInResponse = await axios.post("/auth/login", values); // Use axios.post
+      const loggedIn = loggedInResponse.data;
+      onSubmitProps.resetForm();
+      if (loggedIn) {
+        dispatch(
+          setLogin({
+            user: loggedIn.user,
+            token: loggedIn.token,
+          })
+        );
+        navigate("/home");
+      }
+    } catch (error) {
+      console.error("Error while logging in:", error);
     }
   };
 

@@ -25,10 +25,8 @@
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
   },
-  "proxy": [
-    "https://social-backend-3jlzw7647-shireen-ansaris-projects.vercel.app/",
-    "http://localhost:3001/"
-  ],
+  "proxy": "https://social-backend-snowy.vercel.app/"
+  ,
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
