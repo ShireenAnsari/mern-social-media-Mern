@@ -31,7 +31,8 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors(
   {
-    
+    origin:'https://social-frontend-3aahe9gr4-shireen-ansaris-projects.vercel.app/',
+    credentials:true
   }
 ));
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
