@@ -65,7 +65,7 @@ const Form = () => {
     formData.append("picturePath", values.picture.name);
 
     try {
-      const savedUserResponse = await axios.post("/auth/register", formData); // Use axios.post
+      const savedUserResponse = await axios.post("https://social-backend-snowy.vercel.app/auth/register", formData); // Use axios.post
       if (savedUserResponse.status === 402) {
         toast.error("User already exists");
         return;
@@ -82,7 +82,7 @@ const Form = () => {
 
   const login = async (values, onSubmitProps) => {
     try {
-      const loggedInResponse = await axios.post("/auth/login", values); // Use axios.post
+      const loggedInResponse = await axios.post("https://social-backend-snowy.vercel.app/auth/login", values); // Use axios.post
       const loggedIn = loggedInResponse.data;
       onSubmitProps.resetForm();
       if (loggedIn) {
